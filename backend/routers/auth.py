@@ -1,5 +1,6 @@
 """Authentication router with JWT."""
 
+import os
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
@@ -10,9 +11,13 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 from sqlmodel import Session, select
 
-from config import get_settings
 from database import get_session
 from database.models import User, UserCreate, UserRead
+
+# JWT Configuration from environment
+SECRET_KEY = os.getenv("SECRET_KEY", "dev_secret_key_change_in_production")
+ALGORITHM = os.getenv("ALGORITHM", "HS256")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -50,7 +55,6 @@ def get_password_hash(password: str) -> str:
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
     """Create a JWT access token."""
-    settings = get_settings()
     to_encode = data.copy()
 
     if expires_delta:
@@ -59,7 +63,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None) -> s
         expire = datetime.now(timezone.utc) + timedelta(minutes=15)
 
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm=settings.algorithm)
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
 
@@ -90,7 +94,6 @@ async def get_current_user(
     session: Session = Depends(get_session),
 ) -> User:
     """Get current user from JWT token."""
-    settings = get_settings()
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -98,7 +101,7 @@ async def get_current_user(
     )
 
     try:
-        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
@@ -179,8 +182,7 @@ def login(
             detail="User account is disabled",
         )
 
-    settings = get_settings()
-    access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"sub": user.username},
         expires_delta=access_token_expires,
