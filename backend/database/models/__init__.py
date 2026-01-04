@@ -1,5 +1,5 @@
 """Models package."""
 
-from .user import User, UserCreate, UserRead, UserUpdate
+from .user import User
 
-__all__ = ["User", "UserCreate", "UserRead", "UserUpdate"]
+__all__ = ["User"]
