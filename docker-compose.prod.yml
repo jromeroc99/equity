@@ -1,0 +1,50 @@
+# Docker Compose - Production
+# Backend + MySQL containerizados
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: equity-backend-prod
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - ENVIRONMENT=production
+    depends_on:
+      db:
+        condition: service_healthy
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4
+    restart: unless-stopped
+    networks:
+      - equity-network-prod
+
+  db:
+    image: mysql:8.0
+    container_name: equity-db-prod
+    # Puerto NO expuesto en producción
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - equity_mysql_data_prod:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    restart: unless-stopped
+    networks:
+      - equity-network-prod
+
+volumes:
+  equity_mysql_data_prod:
+    name: equity_mysql_data_prod
+
+networks:
+  equity-network-prod:
+    name: equity-network-prod

@@ -1,0 +1,26 @@
+# Docker Compose - Development
+# Solo MySQL persistente, backend corre local con Python/venv
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: equity-db-dev
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: equity_dev
+      MYSQL_USER: equity_user
+      MYSQL_PASSWORD: equity_pass
+    volumes:
+      - equity_mysql_data_dev:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  equity_mysql_data_dev:
+    name: equity_mysql_data_dev

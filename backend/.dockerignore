@@ -1,0 +1,52 @@
+# Docker ignore file
+# Exclude files not needed in the container
+
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+.eggs
+*.egg-info
+.pytest_cache
+.coverage
+htmlcov
+
+# Virtual environments
+venv
+.venv
+env
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Tests (excluded from prod builds)
+tests/
+*_test.py
+test_*.py
+conftest.py
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+
+# Environment files
+.env*
+!.env.example
+
+# Misc
+.DS_Store
+*.log

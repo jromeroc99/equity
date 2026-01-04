@@ -1,0 +1,22 @@
+# Docker Compose - Test
+# MySQL efímera (tmpfs), se destruye al parar
+
+services:
+  db-test:
+    image: mysql:8.0
+    container_name: equity-db-test
+    ports:
+      - "3307:3306"  # Puerto diferente para no colisionar con dev
+    environment:
+      MYSQL_ROOT_PASSWORD: test_root
+      MYSQL_DATABASE: equity_test
+      MYSQL_USER: test_user
+      MYSQL_PASSWORD: test_pass
+    tmpfs:
+      - /var/lib/mysql  # Almacenamiento en memoria, se destruye al parar
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-ptest_root"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 20s
