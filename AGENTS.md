@@ -14,7 +14,8 @@ No avanzar a la siguiente fase hasta que la anterior esté completamente funcion
 - Ejecutar una tarea a la vez (task by task)
 - Después de completar cada tarea, preguntar confirmación al usuario antes de continuar
 - Esperar aprobación explícita antes de proceder con la siguiente tarea
-- **Testing es obligatorio**: No avanzar a la siguiente tarea hasta que la actual tenga tests pasando correctamente
+- **Testing es obligatorio**: No avanzar a la siguiente tarea hasta que la actual tenga tests pasando correctamente. test se debe crear una base de datos aislada y autodestruirse.
+- **Dev** debe ser persistente (database incluida), pero debe estar aislada de producción que tendrá un servicio aparte
 
 ## Stack Tecnológico
 
@@ -31,8 +32,8 @@ No avanzar a la siguiente fase hasta que la anterior esté completamente funcion
 
 ### Entorno de Desarrollo
 - **Entorno**: WSL2
-- **Base de Datos**: MySQL local (sin Docker por ahora)
-- **Docker**: Se implementará al final, cuando todo funcione en local
+- **Base de Datos**: MySQL local 
+- **Docker**: app dockerizada, separado test, dev, prod
 
 ### Decisiones de Diseño
 - **Moneda**: EUR (sin multi-moneda por ahora)

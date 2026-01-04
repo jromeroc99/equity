@@ -7,23 +7,23 @@
 - **RF-001.4**: Eliminar en cascada todas las transacciones al eliminar cuenta
 
 ## RF-002: Gestión de Catálogos
-- **RF-002.1**: Crear categorías con nombre, icono, color y tipo (regular/transfer/investment)
+- **RF-002.1**: Crear categorías con nombre, icono, color y tipo (normal, inversión, deuda, transferencia entre cuentas)
 - **RF-002.2**: Editar categorías existentes
 - **RF-002.3**: Eliminar categorías personalizadas
-- **RF-002.4**: Crear/editar/eliminar activos (nombre, símbolo, icono, color)
-- **RF-002.5**: Crear/editar/eliminar pasivos (nombre, acreedor, icono, color)
+- **RF-002.4**: Crear/editar/eliminar activos (nombre, ticker, participaciones, precio medio de compra, icono, color)
+- **RF-002.5**: Crear/editar/eliminar pasivos (nombre, acreedor,tipo_sistema,capital_pendiente,tin_actual,meses_restantes, icono, color)
 - **RF-002.6**: Confirmación explícita antes de eliminar activos/pasivos
 
-## RF-003: Transacciones Bancarias
+## RF-003: Transacciones Bancarias (core de la app)
 - **RF-003.1**: Registrar ingreso/gasto con fecha, concepto, importe, cuenta y categoría
 - **RF-003.2**: Actualizar balance de cuenta automáticamente
 - **RF-003.3**: Añadir notas opcionales
+- **RF-003.4**: Añadir activo/ pasivo directamente desde un movimiento bancario
 
 ## RF-004: Transacciones de Activos
-- **RF-004.1**: Registrar compra/venta con fecha, activo, cantidad y precio unitario
-- **RF-004.2**: Calcular total automáticamente (cantidad × precio)
-- **RF-004.3**: Calcular balance actual del activo
-- **RF-004.4**: Calcular precio promedio de compra ponderado
+- **RF-004.1**: Registrar compra/venta con fecha, activo, cantidad, precio unitario, divisa
+- **RF-004.2**: Calcular total automáticamente (cantidad × precio) y actualizar precio medio de compra y actualizar tabla de activos
+
 
 ## RF-005: Transacciones de Pasivos
 - **RF-005.1**: Registrar préstamo/pago con fecha, pasivo e importe
